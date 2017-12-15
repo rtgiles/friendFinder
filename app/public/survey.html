@@ -78,13 +78,13 @@
 
         function surveyQuestions(){
             //$('questionBlock').append();
-            for (var i=0; i<=surveyQues.length; i++){
-                let question= `<h4><strong>Question 1</strong></h4>
+            for (var i=0; i<=surveyQues.length-1; i++){
+                let question= `<h4><strong>Question ${i+1}</strong></h4>
                     <fieldset class="form-group">
                         <label for="question01">${surveyQues[i]}</label>
                         <br>
                         <div class="col-md-4">
-                            <select class="form-control" id="question01" name="scores[0]">
+                            <select class="form-control" id="question0${i+1}" name="scores[0]">
                                 <option>1 (Strongly Disagree)</option>
                                 <option>2</option>
                                 <option>3</option>
