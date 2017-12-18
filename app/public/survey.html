@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
         crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="public/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="public/style.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
@@ -27,28 +27,28 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="photo">Link to Photo Image (Required)</label>
-                    <input type="text" class="form-control" placeholder="http://coolpic.jpg" id="photo" name="photo" required>
+                    <input type="text" class="form-control" placeholder="https://www.biography.com/.image/t_share/MTE1ODA0OTcxODYxNjQwNzE3/halle-berry-9542339-1-402.jpg" id="photo" name="photo" required>
                 </fieldset>
                 <hr>
                 <div class="container" id="questionBlock"></div>
                 <br>
-                <input type="submit " class="btn btn-primary " value="Request Friend " id="submit ">
+                <input type="submit " class="btn btn-primary " value="Request Friend " id="submit">
             </form>
         </div>
         <hr>
         <a href="/api/friends ">API Friends List</a> | <a href="https://github.com/rtgiles/friendFinder" target="_blank ">GitHub Repo</a>
     </div>
     
-    <div id="bestFriendModal " class="modal fade " role="dialog ">
-        <div class="modal-dialog ">
-            <div class="modal-content ">
-                <div class="modal-header ">
-                    <button type="button " class="close " data-dismiss="modal ">X</button>
-                    <h2 class="modal-title ">Best Match</h2>
+    <div id="modal1" class="modal fade" role="dialog ">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                    <h2 class="modal-title">Best Match</h2>
                 </div>
-                <div class="modal-body ">
-                    <h2 id="bestFriendName "></h2>
-                    <img id="bestFriendImg " src=>
+                <div class="modal-body">
+                    <h2 id="userMatch"></h2>
+                    <img id="matchImage" src="">
                 </div>
             </div>
         </div>
@@ -81,10 +81,10 @@
             for (var i=0; i<=surveyQues.length-1; i++){
                 let question= `<h4><strong>Question ${i+1}</strong></h4>
                     <fieldset class="form-group">
-                        <label for="question01">${surveyQues[i]}</label>
+                        <label for="question${i+1}">${surveyQues[i]}</label>
                         <br>
                         <div class="col-md-4">
-                            <select class="form-control" id="question0${i+1}" name="scores[0]">
+                            <select class="form-control" id="question${i+1}" name="scores[i]">
                                 <option>1 (Strongly Disagree)</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -100,25 +100,36 @@
        surveyQuestions();
     });
     
-    $('#submit').on("click ", function() {
-                var userInput = {
+    $('#submit').on("click ", function(event) {
+                event.preventDefault();
+                var userInput= {
                 name: $('#name').val().trim(),
                 photo: $('#photo').val().trim(),
-                scores: [$('#question01').val().trim(), $('#question02').val().trim(), $('#question03').val().trim(), $('#question04').val().trim(), $('#question05').val().trim(), $('#question06').val().trim(), $('#question07').val().trim(), $('#question08').val().trim(), $('#question09').val().trim(), $('#question10').val().trim()]
-            }
+                scores: [$('#question1').val().trim(),
+                         $('#question2').val().trim(),
+                         $('#question3').val().trim(),
+                         $('#question4').val().trim(),
+                         $('#question5').val().trim(),
+                         $('#question6').val().trim(),
+                         $('#question7').val().trim(),
+                         $('#question8').val().trim(),
+                         $('#question9').val().trim(),
+                         $('#question10').val().trim()
+                        ]
+            };
+           
+            console.log('userInput = ' + JSON.stringify(userInput));
+                
+            $.post("/api/friends", userInput).done(function(data) {
+                console.log("Match Data = "+ JSON.stringify(data));
+                $("#userMatch").text(data.name);
+                $("#userMatchImg").attr("src", data.photo);
     
-            var currentURL = window.location.origin;
-    
-            $.post(currentURL + '/api/friends', userInput, function(data) {
-    
-                $("#bestFriendName ").text(data.name);
-                $("#bestFriendImg ").attr("src ", data.photo);
-    
-                $("#bestFriendModal ").modal("show ");
+                $("#modal1").modal("show");
     
             });
     
-            return false;
+            //return false;
         });
 
     </script>
