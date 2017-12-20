@@ -48,7 +48,7 @@
                 </div>
                 <div class="modal-body">
                     <h2 id="userMatch"></h2>
-                    <img id="matchImage" src="">
+                    <img id="userMatchImage" width="300" height="300" src="https://www.disneyclips.com/imagesnewb/images/classic-minnie14.png">
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
             $.post("/api/friends", userInput).done(function(data) {
                 console.log("Match Data = "+ JSON.stringify(data));
                 $("#userMatch").text(data.name);
-                $("#userMatchImg").attr("src", data.photo);
+                $("#userMatchImage").attr("src", data.photo);
     
                 $("#modal1").modal("show");
     
